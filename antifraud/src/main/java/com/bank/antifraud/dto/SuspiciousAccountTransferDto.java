@@ -29,3 +29,4 @@ public class SuspiciousAccountTransferDto implements Serializable {
     String blockedReason;
     String suspiciousReason;
 }
+

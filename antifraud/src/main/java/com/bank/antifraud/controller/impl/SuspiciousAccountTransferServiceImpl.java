@@ -1,4 +1,4 @@
-package com.bank.antifraud.service.impl;
+package com.bank.antifraud.controller.impl;
 
 import com.bank.antifraud.dto.SuspiciousAccountTransferDto;
 import com.bank.antifraud.entity.SuspiciousAccountTransferEntity;
