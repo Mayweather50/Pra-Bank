@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,8 +20,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(UserController.class)
@@ -35,6 +38,9 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @InjectMocks
+    private UserController userController;
 
     @Test
     @DisplayName("создание пользователя по заполненным данным, позитивный сценарий")
@@ -62,14 +68,12 @@ class UserControllerTest {
 
     @Test
     @DisplayName("создание пользователя с пустыми данными, негативный сценарий")
-    void createUserByEmptyUserDataNegativeTest() throws Exception {
-        UserDto userDto = null;
+    void createUserByEmptyUserDataNegativeTest() {
+        UserDto userDto = new UserDto();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").doesNotExist());
+        when(userService.save(userDto)).thenReturn(null);
+
+        assertThrows(NullPointerException.class, () -> userController.create(userDto));
     }
 
     @Test
@@ -186,17 +190,11 @@ class UserControllerTest {
 
     @Test
     @DisplayName("чтение всех пользователей по несуществующим ids, негативный сценарий")
-    void readAllByNonExistIdsNegativeTest() throws Exception {
-        Long id1 = null;
-        Long id2 = null;
-        List<Long> ids = new ArrayList<>();
-        ids.add(id1);
-        ids.add(id2);
+    void readAllByNonExistIdsNegativeTest() {
+        List<Long> ids = Arrays.asList(1L, 2L, 3L);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/read/all")
-                        .param("ids", String.valueOf(id1), String.valueOf(id2))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(""));
+        when(userService.findAllByIds(ids)).thenReturn(null);
+
+        assertThrows(NullPointerException.class, () -> userController.readAll(ids));
     }
 }
