@@ -1,6 +1,6 @@
 package com.bank.antifraud.controller;
 
-import com.bank.antifraud.controller.impl.SuspiciousCardTransferServiceImpl;
+import com.bank.antifraud.service.impl.SuspiciousCardTransferServiceImpl;
 import com.bank.antifraud.dto.SuspiciousCardTransferDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

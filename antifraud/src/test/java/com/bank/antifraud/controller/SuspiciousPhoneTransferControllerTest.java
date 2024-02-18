@@ -1,6 +1,6 @@
 package com.bank.antifraud.controller;
 
-import com.bank.antifraud.controller.impl.SuspiciousPhoneTransferServiceImpl;
+import com.bank.antifraud.service.impl.SuspiciousPhoneTransferServiceImpl;
 import com.bank.antifraud.dto.SuspiciousPhoneTransferDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

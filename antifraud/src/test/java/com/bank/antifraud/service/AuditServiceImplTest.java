@@ -1,7 +1,7 @@
 package com.bank.antifraud.service;
 
 import com.bank.antifraud.controller.AuditController;
-import com.bank.antifraud.controller.impl.AuditServiceImpl;
+import com.bank.antifraud.service.impl.AuditServiceImpl;
 import com.bank.antifraud.dto.AuditDto;
 import com.bank.antifraud.entity.AuditEntity;
 import com.bank.antifraud.mappers.AuditMapper;

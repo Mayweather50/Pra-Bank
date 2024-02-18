@@ -1,6 +1,6 @@
 package com.bank.antifraud.controller;
 
-import com.bank.antifraud.controller.impl.AuditServiceImpl;
+import com.bank.antifraud.service.impl.AuditServiceImpl;
 import com.bank.antifraud.dto.AuditDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
