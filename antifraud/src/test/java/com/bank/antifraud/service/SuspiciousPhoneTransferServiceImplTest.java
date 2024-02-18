@@ -1,6 +1,6 @@
 package com.bank.antifraud.service;
 
-import com.bank.antifraud.controller.impl.SuspiciousPhoneTransferServiceImpl;
+import com.bank.antifraud.service.impl.SuspiciousPhoneTransferServiceImpl;
 import com.bank.antifraud.dto.SuspiciousPhoneTransferDto;
 import com.bank.antifraud.entity.SuspiciousPhoneTransferEntity;
 import com.bank.antifraud.mappers.SuspiciousPhoneTransferMapper;
