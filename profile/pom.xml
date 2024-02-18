@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>17</java.version>
+        <preliquibase.version>1.3.0</preliquibase.version>
         <common.version>0.0.1-SNAPSHOT</common.version>
     </properties>
 
@@ -28,6 +29,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.lbruun.springboot</groupId>
+            <artifactId>preliquibase-spring-boot-starter</artifactId>
+            <version>${preliquibase.version}</version>
         </dependency>
     </dependencies>
 
