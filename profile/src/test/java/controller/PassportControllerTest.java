@@ -1,0 +1,149 @@
+package controller;
+
+import com.bank.profile.ProfileApplication;
+import com.bank.profile.controller.PassportController;
+import com.bank.profile.dto.PassportDto;
+import com.bank.profile.service.PassportService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+
+@WebMvcTest(PassportController.class)
+@ExtendWith(MockitoExtension.class)
+@ContextConfiguration(classes = ProfileApplication.class)
+class PassportControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private PassportService passportService;
+
+    @Test
+    @DisplayName("Чтение по id, позитивный сценарий")
+    void readByIdPositiveTest() throws Exception {
+        Long id = 1L;
+        PassportDto expectedPassportDto = new PassportDto();
+        expectedPassportDto.setId(id);
+
+        when(passportService.findById(id)).thenReturn(expectedPassportDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/passport/read/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+    }
+
+    @Test
+    @DisplayName("Чтение по несуществующему id, негативный сценарий")
+    void readByNonExistIdNegativeTest() throws Exception {
+        Long id = null;
+
+        when(passportService.findById(id)).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/passport/read/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Создание записи, позитивный сценарий")
+    void createPositiveTest() throws Exception {
+        PassportDto inputDto = new PassportDto();
+        PassportDto outputDto = new PassportDto();
+        outputDto.setId(1L);
+
+        when(passportService.save(inputDto)).thenReturn(outputDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/passport/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(inputDto)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L));
+    }
+
+    @Test
+    @DisplayName("Создание записи с невалидными данными, негативный сценарий")
+    void createNegativeTest() throws Exception {
+        PassportDto inputDto = null;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/passport/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(inputDto)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Обновление записи, позитивный сценарий")
+    void updatePositiveTest() throws Exception {
+        Long id = 1L;
+        PassportDto inputDto = new PassportDto();
+        PassportDto outputDto = new PassportDto();
+        outputDto.setId(id);
+
+        when(passportService.update(id, inputDto)).thenReturn(outputDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/passport/update/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(inputDto)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+    }
+
+    @Test
+    @DisplayName("Обновление записи с невалидными данными, негативный сценарий")
+    void updateNegativeTest() throws Exception {
+        Long id = 1L;
+        PassportDto inputDto = null;
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/passport/update/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(inputDto)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Чтение всех записей по списку id, позитивный сценарий")
+    void readAllByIdPositiveTest() throws Exception {
+        List<Long> ids = Arrays.asList(1L, 2L);
+        List<PassportDto> outputDtoList = new ArrayList<>();
+        outputDtoList.add(new PassportDto());
+        outputDtoList.get(0).setId(1L);
+        outputDtoList.add(new PassportDto());
+        outputDtoList.get(1).setId(2L);
+
+        when(passportService.findAllById(ids)).thenReturn(outputDtoList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/passport/read/all")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("ids", "1", "2"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2L));
+    }
+
+    @Test
+    @DisplayName("Чтение всех записей по пустому списку id, негативный сценарий")
+    void readAllByIdNegativeTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/passport/read/all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+}
+
