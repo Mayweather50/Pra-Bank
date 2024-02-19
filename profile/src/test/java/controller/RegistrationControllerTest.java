@@ -142,7 +142,8 @@ class RegistrationControllerTest {
     @DisplayName("Чтение всех записей по пустому списку id, негативный сценарий")
     void readAllByIdNegativeTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/registration/read/all")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("ids",""))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
     }
 }

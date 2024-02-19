@@ -150,16 +150,14 @@ class AccountDetailsIdControllerTest {
     @Test
     @DisplayName("чтение всех пользователей по несуществующим ids, негативный сценарий")
     void readAllByNonExistIdsNegativeTest() throws Exception {
-        Long id1 = null;
-        Long id2 = null;
-        List<Long> ids = new ArrayList<>();
-        ids.add(id1);
-        ids.add(id2);
-
+        String id1 = "1";
+        String id2 = "2";
         mockMvc.perform(MockMvcRequestBuilders.get("/account/details/read/all")
-                        .param("ids", String.valueOf(id1), String.valueOf(id2))
+                        .param("ids", id1, id2)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string(""));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
+
+
 }

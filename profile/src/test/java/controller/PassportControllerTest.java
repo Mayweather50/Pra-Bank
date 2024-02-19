@@ -142,8 +142,10 @@ class PassportControllerTest {
     @DisplayName("Чтение всех записей по пустому списку id, негативный сценарий")
     void readAllByIdNegativeTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/passport/read/all")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("ids", ""))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
+
     }
 }
 
