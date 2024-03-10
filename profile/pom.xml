@@ -22,6 +22,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.bank</groupId>
             <artifactId>common</artifactId>
             <version>${common.version}</version>
